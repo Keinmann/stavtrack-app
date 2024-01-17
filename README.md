@@ -1,3 +1,7 @@
+# Stavtrack-app
+
+This project is base on React TSX with corresponding support of MUI Components.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
