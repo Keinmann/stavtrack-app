@@ -11,14 +11,21 @@ import {
 	InputAdornment,
 	Menu,
 	MenuItem,
+	Paper,
 	Stack,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	TextField,
 	Toolbar,
 	collapseClasses,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-interface apiDataType {
+interface remoteData {
 	id: number;
 	name: string;
 	uniqueId: string;
@@ -67,6 +74,32 @@ export const DeviceList = () => {
 	const [menuButtonValue, setMenuButtonValue] = useState<string>(
 		menuButtonData[0].key
 	);
+
+	//!testing connection
+	const getRemoteData = async () => {
+		const url = process.env.REACT_APP_REMOTE_API;
+		const token = process.env.REACT_APP_BEARERTOKEN;
+		if (!url || !token) {
+			console.log('no api info');
+			return;
+		}
+		try {
+			const response = await fetch(url, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			if (response.status === 200) {
+				const json = await response.json();
+				console.log(json);
+			} else {
+				console.log('fetch error');
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+	useEffect(() => {
+		getRemoteData();
+	}, []);
 
 	return (
 		<Stack
@@ -184,7 +217,20 @@ export const DeviceList = () => {
 				px={3}
 				direction={'column'}
 				spacing={1}>
-				Table
+				<TableContainer component={Paper}>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell>id</TableCell>
+								<TableCell>name</TableCell>
+								<TableCell>uniqueId</TableCell>
+								<TableCell>status</TableCell>
+								<TableCell>lastUpdate</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody></TableBody>
+					</Table>
+				</TableContainer>
 			</Stack>
 		</Stack>
 	);
