@@ -6,6 +6,7 @@ import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import {
 	Button,
 	ButtonGroup,
+	Checkbox,
 	Divider,
 	IconButton,
 	InputAdornment,
@@ -21,9 +22,9 @@ import {
 	TableRow,
 	TextField,
 	Toolbar,
-	collapseClasses,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { CheckBox, NetworkWifiTwoTone } from '@mui/icons-material';
 
 interface rawDataItem {
 	id: number;
@@ -34,7 +35,7 @@ interface rawDataItem {
 	optional?: {};
 }
 
-const rawData: rawDataItem[] = [
+const rowData: rawDataItem[] = [
 	{
 		id: 1,
 		name: 'Mercedes Atego 1',
@@ -155,6 +156,25 @@ export const DeviceList = () => {
 		menuButtonData[0].key
 	);
 
+	//table variables
+	const [selectedRows, setSelectedRows] = useState<number[]>([]);
+	console.log(selectedRows);
+	const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (event.target.checked) {
+			setSelectedRows(rowData.map((row) => row.id));
+			return;
+		}
+		setSelectedRows([]);
+	};
+	const isRowSelected = (id: number) => selectedRows.indexOf(id) !== -1;
+	const handleRowClick = (event: React.MouseEvent<HTMLElement>, id: number) => {
+		if (selectedRows.indexOf(id) !== -1) {
+			setSelectedRows(selectedRows.filter((row) => row !== id));
+			return;
+		}
+		const newSelectedRows = selectedRows.concat(id).sort((a, b) => a - b);
+		setSelectedRows(newSelectedRows);
+	};
 	//!testing connection
 	const getRemoteData = async () => {
 		const url = process.env.REACT_APP_REMOTE_API;
@@ -177,9 +197,9 @@ export const DeviceList = () => {
 			console.error(error);
 		}
 	};
-	useEffect(() => {
-		getRemoteData();
-	}, []);
+	// useEffect(() => {
+	// 	getRemoteData();
+	// }, []);
 
 	return (
 		<Stack
@@ -301,6 +321,9 @@ export const DeviceList = () => {
 					<Table>
 						<TableHead>
 							<TableRow>
+								<TableCell>
+									<Checkbox onChange={handleSelectAll} />
+								</TableCell>
 								<TableCell>id</TableCell>
 								<TableCell>name</TableCell>
 								<TableCell>uniqueId</TableCell>
@@ -309,8 +332,15 @@ export const DeviceList = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rawData?.map((row) => (
-								<TableRow key={row.id}>
+							{rowData?.map((row) => (
+								<TableRow
+									key={row.id}
+									onClick={(event) => {
+										handleRowClick(event, row.id);
+									}}>
+									<TableCell>
+										<Checkbox checked={isRowSelected(row.id)} />
+									</TableCell>
 									<TableCell>{row.id}</TableCell>
 									<TableCell>{row.name}</TableCell>
 									<TableCell>{row.uniqueId}</TableCell>
