@@ -25,21 +25,101 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-interface remoteData {
+interface rawDataItem {
 	id: number;
 	name: string;
 	uniqueId: string;
 	status: string;
-	disabled: boolean;
 	lastUpdate: string;
-	positionId: number;
-	groupId: number;
-	phone: string;
-	model: string;
-	contact: string;
-	category: string;
-	attributes: object;
+	optional?: {};
 }
+
+const rawData: rawDataItem[] = [
+	{
+		id: 1,
+		name: 'Mercedes Atego 1',
+		uniqueId: '761253',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 2,
+		name: 'Mercedes Atego 2',
+		uniqueId: '761253',
+		status: 'idle',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 3,
+		name: 'Mercedes Atego 3',
+		uniqueId: '761253',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 4,
+		name: 'Mercedes Atego 4',
+		uniqueId: '675467',
+		status: 'idle',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 5,
+		name: 'Mercedes Atego 5',
+		uniqueId: '2345',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 6,
+		name: 'Mercedes Atego 6',
+		uniqueId: '76457',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 7,
+		name: 'Mercedes Atego 7',
+		uniqueId: '9876865',
+		status: 'moving',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 8,
+		name: 'Mercedes Atego 8',
+		uniqueId: '23552',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 9,
+		name: 'Mercedes Atego 9',
+		uniqueId: '523423',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 10,
+		name: 'Mercedes Atego 10',
+		uniqueId: '423432',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 11,
+		name: 'Mercedes Atego 11',
+		uniqueId: '63463',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 12,
+		name: 'Mercedes Atego 12',
+		uniqueId: '956756',
+		status: 'idle',
+		lastUpdate: new Date().toDateString(),
+	},
+];
 
 export const DeviceList = () => {
 	const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(
@@ -228,7 +308,17 @@ export const DeviceList = () => {
 								<TableCell>lastUpdate</TableCell>
 							</TableRow>
 						</TableHead>
-						<TableBody></TableBody>
+						<TableBody>
+							{rawData?.map((row) => (
+								<TableRow key={row.id}>
+									<TableCell>{row.id}</TableCell>
+									<TableCell>{row.name}</TableCell>
+									<TableCell>{row.uniqueId}</TableCell>
+									<TableCell>{row.status}</TableCell>
+									<TableCell>{row.lastUpdate}</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
 					</Table>
 				</TableContainer>
 			</Stack>
