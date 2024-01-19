@@ -24,7 +24,6 @@ import {
 	Toolbar,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { CheckBox, NetworkWifiTwoTone } from '@mui/icons-material';
 
 interface rawDataItem {
 	id: number;
@@ -68,10 +67,28 @@ export const DeviceList = () => {
 	const [menuButtonValue, setMenuButtonValue] = useState<string>(
 		menuButtonData[0].key
 	);
-
+	const [searchDisabled, setSearchDisabled] = useState<boolean>(true);
+	const [searchValues, setSearchValues] = useState<number[]>([]);
+	const [searchString, setSearchString] = useState<string>('');
+	const handleChangeSearch = (value: string) => {
+		let valueArray: number[] = value
+			.split(/\D/)
+			.filter((n) => n)
+			.map(Number)
+			.sort((a, b) => a - b);
+		valueArray = valueArray.filter(
+			(value, index) => valueArray.indexOf(value) === index
+		);
+		console.log(valueArray);
+		setSearchDisabled(valueArray.length >= 0 ? false : true);
+		setSearchValues(valueArray);
+		setSearchString(value);
+	};
+	const handleSearchClick = () => {
+		setSearchString(searchValues.join(', ').toString());
+	};
 	//table variables
 	const [selectedRows, setSelectedRows] = useState<number[]>([]);
-	console.log(selectedRows);
 	const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.checked) {
 			setSelectedRows(rowData.map((row) => row.id));
@@ -88,31 +105,35 @@ export const DeviceList = () => {
 		const newSelectedRows = selectedRows.concat(id).sort((a, b) => a - b);
 		setSelectedRows(newSelectedRows);
 	};
-	//!testing connection
-	const getRemoteData = async () => {
-		const url = process.env.REACT_APP_REMOTE_API;
-		const token = process.env.REACT_APP_BEARERTOKEN;
-		if (!url || !token) {
-			console.log('no api info');
-			return;
-		}
-		try {
-			const response = await fetch(url, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
-			if (response.status === 200) {
-				const json = await response.json();
-				console.log(json);
-			} else {
-				console.log('fetch error');
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	const rows = !searchDisabled
+		? rowData.filter((r) => searchValues.indexOf(r.id) >= 0)
+		: rowData;
+	//REMOTE CONNECTION!
+	// const getRemoteData = async () => {
+	// 	const url = process.env.REACT_APP_REMOTE_API;
+	// 	const token = process.env.REACT_APP_BEARERTOKEN;
+	// 	if (!url || !token) {
+	// 		console.log('no api info');
+	// 		return;
+	// 	}
+	// 	try {
+	// 		const response = await fetch(url, {
+	// 			headers: { Authorization: `Bearer ${token}` },
+	// 		});
+	// 		if (response.status === 200) {
+	// 			const json = await response.json();
+	// 			console.log(json);
+	// 		} else {
+	// 			console.log('fetch error');
+	// 		}
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	}
+	// };
 	// useEffect(() => {
 	// 	getRemoteData();
 	// }, []);
+	//REMOTE CONNECTION is not working, FAKING CONNECTION!
 
 	return (
 		<Stack
@@ -129,16 +150,25 @@ export const DeviceList = () => {
 						spacing={1}>
 						<TextField
 							color='primary'
+							type='text'
 							size='small'
+							label='Поиск по ID'
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position='end'>
-										<IconButton>
-											<SearchIcon color='primary' />
+										<IconButton
+											disabled={searchDisabled}
+											onClick={handleSearchClick}>
+											<SearchIcon
+												color={searchDisabled ? 'primary' : 'success'}
+											/>
 										</IconButton>
 									</InputAdornment>
 								),
-							}}></TextField>
+							}}
+							value={searchString}
+							onChange={(event) => handleChangeSearch(event.target.value)}
+						/>
 						<ButtonGroup>
 							{menuButtonData.map((menuButton) => (
 								<Button
@@ -265,7 +295,7 @@ export const DeviceList = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rowData?.map((row) => {
+							{rows?.map((row) => {
 								const isSelected = isRowSelected(row.id);
 								return (
 									<TableRow
