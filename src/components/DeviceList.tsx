@@ -35,93 +35,6 @@ interface rawDataItem {
 	optional?: {};
 }
 
-const rowData: rawDataItem[] = [
-	{
-		id: 1,
-		name: 'Mercedes Atego 1',
-		uniqueId: '761253',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 2,
-		name: 'Mercedes Atego 2',
-		uniqueId: '761253',
-		status: 'idle',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 3,
-		name: 'Mercedes Atego 3',
-		uniqueId: '761253',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 4,
-		name: 'Mercedes Atego 4',
-		uniqueId: '675467',
-		status: 'idle',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 5,
-		name: 'Mercedes Atego 5',
-		uniqueId: '2345',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 6,
-		name: 'Mercedes Atego 6',
-		uniqueId: '76457',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 7,
-		name: 'Mercedes Atego 7',
-		uniqueId: '9876865',
-		status: 'moving',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 8,
-		name: 'Mercedes Atego 8',
-		uniqueId: '23552',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 9,
-		name: 'Mercedes Atego 9',
-		uniqueId: '523423',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 10,
-		name: 'Mercedes Atego 10',
-		uniqueId: '423432',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 11,
-		name: 'Mercedes Atego 11',
-		uniqueId: '63463',
-		status: 'active',
-		lastUpdate: new Date().toDateString(),
-	},
-	{
-		id: 12,
-		name: 'Mercedes Atego 12',
-		uniqueId: '956756',
-		status: 'idle',
-		lastUpdate: new Date().toDateString(),
-	},
-];
-
 export const DeviceList = () => {
 	const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(
 		null
@@ -321,33 +234,61 @@ export const DeviceList = () => {
 					<Table>
 						<TableHead>
 							<TableRow>
-								<TableCell>
+								<TableCell width={2}>
 									<Checkbox onChange={handleSelectAll} />
 								</TableCell>
-								<TableCell>id</TableCell>
-								<TableCell>name</TableCell>
-								<TableCell>uniqueId</TableCell>
-								<TableCell>status</TableCell>
-								<TableCell>lastUpdate</TableCell>
+								<TableCell
+									width={10}
+									align='left'>
+									ID
+								</TableCell>
+								<TableCell
+									width={20}
+									align='center'>
+									Название
+								</TableCell>
+								<TableCell
+									width={20}
+									align='center'>
+									UID
+								</TableCell>
+								<TableCell
+									width={10}
+									align='center'>
+									Статус
+								</TableCell>
+								<TableCell
+									width={30}
+									align='right'>
+									Последнее обнов.
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rowData?.map((row) => (
-								<TableRow
-									key={row.id}
-									onClick={(event) => {
-										handleRowClick(event, row.id);
-									}}>
-									<TableCell>
-										<Checkbox checked={isRowSelected(row.id)} />
-									</TableCell>
-									<TableCell>{row.id}</TableCell>
-									<TableCell>{row.name}</TableCell>
-									<TableCell>{row.uniqueId}</TableCell>
-									<TableCell>{row.status}</TableCell>
-									<TableCell>{row.lastUpdate}</TableCell>
-								</TableRow>
-							))}
+							{rowData?.map((row) => {
+								const isSelected = isRowSelected(row.id);
+								return (
+									<TableRow
+										selected={isSelected}
+										key={row.id}
+										onClick={(event) => {
+											handleRowClick(event, row.id);
+										}}>
+										<TableCell>
+											<Checkbox checked={isSelected} />
+										</TableCell>
+										<TableCell
+											aria-label='table-id'
+											align='left'>
+											{row.id}
+										</TableCell>
+										<TableCell align='center'>{row.name}</TableCell>
+										<TableCell align='center'>{row.uniqueId}</TableCell>
+										<TableCell align='center'>{row.status}</TableCell>
+										<TableCell align='right'>{row.lastUpdate}</TableCell>
+									</TableRow>
+								);
+							})}
 						</TableBody>
 					</Table>
 				</TableContainer>
@@ -355,3 +296,90 @@ export const DeviceList = () => {
 		</Stack>
 	);
 };
+
+const rowData: rawDataItem[] = [
+	{
+		id: 1,
+		name: 'Mercedes Atego 1',
+		uniqueId: '761253',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 2,
+		name: 'Mercedes Atego 2',
+		uniqueId: '761253',
+		status: 'idle',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 3,
+		name: 'Mercedes Atego 3',
+		uniqueId: '761253',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 4,
+		name: 'Mercedes Atego 4',
+		uniqueId: '675467',
+		status: 'idle',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 5,
+		name: 'Mercedes Atego 5',
+		uniqueId: '2345',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 6,
+		name: 'Mercedes Atego 6',
+		uniqueId: '76457',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 7,
+		name: 'Mercedes Atego 7',
+		uniqueId: '9876865',
+		status: 'moving',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 8,
+		name: 'Mercedes Atego 8',
+		uniqueId: '23552',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 9,
+		name: 'Mercedes Atego 9',
+		uniqueId: '523423',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 10,
+		name: 'Mercedes Atego 10',
+		uniqueId: '423432',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 11,
+		name: 'Mercedes Atego 11',
+		uniqueId: '63463',
+		status: 'active',
+		lastUpdate: new Date().toDateString(),
+	},
+	{
+		id: 12,
+		name: 'Mercedes Atego 12',
+		uniqueId: '956756',
+		status: 'idle',
+		lastUpdate: new Date().toDateString(),
+	},
+];
