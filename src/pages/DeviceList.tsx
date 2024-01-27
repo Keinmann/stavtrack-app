@@ -50,7 +50,6 @@ export const DeviceList = () => {
   const handleActionMenuClose = () => {
     setActionMenuAnchor(null);
   };
-
   const menuButtonData = [
     {
       title: "Объекты",
@@ -89,8 +88,8 @@ export const DeviceList = () => {
   const handleSearchClick = () => {
     setSearchString(searchValues.join(", ").toString());
   };
-  //table variables
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  console.log("selected:", selectedRows);
   const rows = !searchDisabled
     ? rowData.filter((r) => searchValues.indexOf(r.id) >= 0)
     : rowData;
@@ -110,10 +109,8 @@ export const DeviceList = () => {
     const newSelectedRows = selectedRows.concat(id).sort((a, b) => a - b);
     setSelectedRows(newSelectedRows);
   };
-
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof rawDataItem>("id");
-
   const [rowsPerPage, setRowsPerPage] = React.useState<number>(5);
   const [page, setPage] = React.useState<number>(0);
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -147,11 +144,6 @@ export const DeviceList = () => {
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
-
-  // Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-  // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-  // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-  // with exampleArray.slice().sort(exampleComparator)
   function stableSort<T>(
     array: rawDataItem[],
     comparator: (a: T, b: T) => number
@@ -166,18 +158,10 @@ export const DeviceList = () => {
     });
     return stabilizedThis.map((el) => el[0]);
   }
-
   const visibleRows = stableSort(rows, getComparator(order, orderBy)).slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-  // const visibleRows = React.useMemo(() => {
-  //   return stableSort(rows, getComparator(order, orderBy)).slice(
-  //     page * rowsPerPage,
-  //     page * rowsPerPage + rowsPerPage
-  //   );
-  // }, [order, orderBy, page, rowsPerPage]);
-  // console.log("visible", visibleRows);
 
   //REMOTE CONNECTION!
   // const getRemoteData = async () => {
